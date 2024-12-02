@@ -3,10 +3,11 @@
     background: #8f8;
   }
   100% {
-     background: none;
+    background: none;
   }
 }
 
 .line-item-highlight {
-  animation: line-item-highlight 5s;
+  animation-name: line-item-highlight;
+  animation-delay: 5s;
 }
