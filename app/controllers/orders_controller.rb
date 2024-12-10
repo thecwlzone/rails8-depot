@@ -1,3 +1,11 @@
+#---
+# Excerpted from "Agile Web Development with Rails 8",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit https://pragprog.com/titles/rails8 for more book information.
+#---
 class OrdersController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: %i[ new create ]
@@ -31,13 +39,15 @@ class OrdersController < ApplicationController
       if @order.save
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
-        OrderMailer.received(@order).deliver_later
+        ChargeOrderJob.perform_later(@order, pay_type_params.to_h)
         format.html { redirect_to store_index_url, notice:
-                      "Thank you for your order." }
-        format.json { render :show, status: :created, location: @order }
+          "Thank you for your order." }
+        format.json { render :show, status: :created,
+          location: @order }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
+        format.json { render json: @order.errors,
+          status: :unprocessable_entity }
       end
     end
   end
@@ -73,15 +83,24 @@ class OrdersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def order_params
-      params.expect(order: [ :name, :address, :email, :pay_type,
-                             :credit_card_number, :expiration_date,
-                             :routing_number, :account_number,
-                             :po_number ])
+      params.expect(order: [ :name, :address, :email, :pay_type ])
     end
 
     def ensure_cart_isnt_empty
       if @cart.line_items.empty?
         redirect_to store_index_url, notice: "Your cart is empty"
+      end
+    end
+
+    def pay_type_params
+      if order_params[:pay_type] == "Credit card"
+        params.require(:order).permit(:credit_card_number, :expiration_date)
+      elsif order_params[:pay_type] == "Check"
+        params.require(:order).permit(:routing_number, :account_number)
+      elsif order_params[:pay_type] == "Purchase order"
+        params.require(:order).permit(:po_number)
+      else
+        {}
       end
     end
 end
