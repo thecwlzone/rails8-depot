@@ -4,10 +4,6 @@ service: depot
 # Name of the container image.
 image: thecwlzone/depot
 
-# use the local "in progress" repo instead of a local git clone
-builder:
-  context: "."
-
 # Deploy to these servers.
 servers:
   web:
@@ -22,7 +18,7 @@ servers:
 #
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
-  ssl: false
+  ssl: true
   host: depotprod
 
 # Credentials for your image host.
@@ -75,7 +71,7 @@ volumes:
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
-# asset_path: /rails/public/assets
+asset_path: /rails/public/assets
 
 # Configure the image builder.
 builder:
