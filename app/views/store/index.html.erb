@@ -10,12 +10,8 @@
   <%= turbo_stream_from "products" %>
 
   <ul>
-    <% cache @products do %>
-      <% @products.each do |product| %>
-        <% cache product do %>
-          <%= render partial: "product", object: product %>
-        <% end %>
-      <% end %>
+    <% @products.each do |product| %>
+      <%= render partial: "product", object: product %>
     <% end %>
   </ul>
 </div>
