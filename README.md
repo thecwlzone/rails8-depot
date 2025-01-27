@@ -14,7 +14,7 @@ The development environment is Ubuntu 24.04 LTS and Omakub 1.1.4, all running un
 
 ### Database
 
-sqlite3, version 2.5.0
+sqlite3, version 3.45.1
 
 ### Database initialization
 
@@ -43,3 +43,5 @@ One notable change in the code: the Store index view was using cache on the prod
 ### Next Steps
 
 Rails 8 has added an authentication generator. I want to work with that some more.
+
+Upgrade to TailwindCSS 4.0
