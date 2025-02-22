@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "tailwindcss-rails", "~> 3.3"
 
 # If you're not ready to upgrade to tailwindcss 4.0 yet!
-gem "tailwindcss-ruby", "~> 3.4"
+gem "tailwindcss-ruby", "~> 4.0"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
